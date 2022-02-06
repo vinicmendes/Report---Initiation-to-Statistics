@@ -1,0 +1,293 @@
+---
+title: "Trabalho de Estatística - Relatório 1"
+author: "Vinícius Mendes"
+date: "25/01/2022"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+# Relatório de Estatística Descritiva
+
+## Introdução
+O trabalho em questão tem como objetivo traçar os registros dos alunos matriculados em Estatística, o perfil de cada um, bem como, suas principais características que impactam no desempenho obtido na matéria, com o propósito de auxiliar o curso de Serviço Social e a aprendizagem no conteúdo.
+
+A priori, é válido dizer que o  relatório será divido em alguns pontos, retratando o âmbito de estudo,  abrangendo todo o processo de obtenção dos dados , além de, expor uma análise descritiva de cada dado apresentado.
+
+
+## Materiais e Métodos
+
+
+Inicialmente, é de fato importante ressaltar o objeto de estudo, que nesse caso, são os discentes da matérias de Estatística no período da noite para o curso de Serviço Social, responsável por formar profissionais com visão crítica sobre os problemas sociais e capazes de planejar, implantar, coordenar e avaliar programas e políticas públicas que auxiliem a sociedade, além de atuar como instrumento auxiliar para a definição de ações de intervenção comprometidas com a autonomia dos sujeitos sociais. 
+
+Os dados coletados foram dividivos em classes imprescindíveis para o desenvolvimento do projeto, sendo elas:
+
+* Dados pessoais
+
+* Dados escolares
+
+* Dados extracurriculares
+
+Dentro da primeira, existem os dados relacionados à vida do acadêmico, como idade, gênero, se trabalha e se possui filhos. Em Dados Escolares, foram coletados o coeficiente de rendimento escolar e o tipo de escola em que concluiu o ensino médio. Já em Dados Extracurriculares, foram obtidos as horas de estudo fora de sala de aula, número de livros lidos no ano anterior, a frequência em que o aluno utiliza a biblioteca, além do nível de conhecimento em Inglês.
+
+A exposição dos dados foi realizada através de gráficos e principalmente tabelas, utilizadas adequadamente de forma a expor melhor cada informação, buscando traçar o perfil de cada aluno matriculado em MAF 105 T1.
+
+
+## Análise Descritiva dos Dados
+
+A coleta de dados foi realizada através de um formulário enviado no e-mail dos alunos, entretanto, dos 68 alunos matriculados, apenas 50 responderam. Diante disso, foram listadas todas as informações obtidas em forma de uma tabela.
+
+A representação abaixo apresenta apenas 6 pessoas do corpo estudantil diferentes que responderam à pesquisa. Para visualizar a tabela completa é necessário retirar o _"head"_ localizado na ultima linha do código mencionado a seguir.
+
+```{r}
+set.seed(3881)
+idade <- sample(18:70, 50, replace = TRUE)
+genero <- sample(c("Masculino", "Feminino"), 50, replace = TRUE)
+CR <- round (rnorm(50, mean = 70, sd = 8), digits = 2)
+Trabalha <- sample(c("Sim", "Não"), 50, replace = TRUE)
+Filhos <- sample(c("Sim", "Não"), 50, replace = TRUE)
+EM <- sample(c("Pública", "Privada", "Pública/Privada"), 50, replace = TRUE)
+Horas <- sample(0:20, 50, replace = TRUE)
+Livros <- sample(0:5, 50, prob = c(0.5, 0.1, 0.1, 0.1,0.1, 0.1),replace = TRUE)
+BBT <- sample(c("Nunca Utilizo", 
+                "Utilizo Raramente", "Utilizo com pouca Frequência", 
+                "Utilizo com muita Frequência"), 50, replace = TRUE)
+Ingles <- sample(c("Bom", "Regular", "Ruim", "Péssimo"), 50, replace = TRUE)
+Tab <- cbind(idade, genero, CR, Trabalha, Filhos, EM, Horas, Livros,
+             BBT, Ingles)
+Tab <- as.data.frame(Tab)
+knitr::kable(head(Tab))
+```
+
+### Genero
+
+Foi observado que mais mulheres responderam à pesquisa do que homens. Elas representam cerca de cinquenta e seis por cento (56%) da turma, enquanto os homens quarenta e quatro por cento (44%). Esse fato pode ser observado utilizando as seguinte tabela:
+$\newline$
+$\newline$
+$\newline$
+
+```{r}
+genero.tb <- table(Tab$genero)
+#Frequência Absoluta
+t1 <- cbind("Freq.Abs." = genero.tb)
+#Frequência Relativa
+t2 <- cbind("Freq.Rel." = prop.table(genero.tb))
+#Acrescentar a soma das colunas
+t3 <- cbind("Freq.Abs." = addmargins(genero.tb))
+t4 <- cbind("Freq.Rel." = addmargins(prop.table(genero.tb)))
+#Tabela Final
+knitr::kable(cbind("Freq.Abs." = addmargins(genero.tb), "Freq.Rel." = 
+        addmargins(prop.table(genero.tb))))
+```
+
+Essa proporção fica mais clara na figura a seguir, em que a divisão entre homens e mulheres, apesar de bem próxima, revela uma maior frequência no gênero feminino.
+
+```{r, fig.align='center', fig.height= 4}
+gen <- table(Tab$genero)
+genero1 <- prop.table(gen)
+percent <- round(100*(gen/sum(gen)), digits = 3)
+pie(genero1,labels=percent,main ="Figura 1: Proporção entre gêneros dos estudantes",cex=1
+    , col = c(2,12))
+legend("topright",fill = c(2,12), legend=c(names(gen)))
+
+```
+
+
+$\newline$
+
+### Total idades
+
+A idade dos alunos variam de dezenove aos sessenta e oito anos. A faixa dos vinte e cinco aos trinta anos possuem uma frequência maior de pessoas possuíntes dessa idade e as faixas de idade que possuem menos alunos pertencentes são as de dezoito a vinte anos e trinta e cinco a quarenta anos.
+
+O histograma abaixo ilustra bem essas observações.
+
+```{r, fig.align='center', fig.height= 4}
+str(Tab$idade)
+Tab$idade <- as.numeric(Tab$idade)
+tab <- table(Tab$idade)
+hist(Tab$idade, main = "Figura 2: Histograma da relação da idade dos Estudantes", 
+     xlab = "Idades", ylab = "Frequência", col = c("purple"), border = "white",
+     xlim = c(15,75), ylim = c(0,10), labels = TRUE)
+```
+$\newline$
+
+### Média de Idades
+
+A média das idades dos discentes pode ser coletada através da função "mean", utilizando a tabela das idades como parâmetro.
+
+```{r}
+knitr::kable(mean(Tab$idade))
+```
+
+Utilizando o dado anterior juntamente com a proxima tabela, podemos notar que a média das idades está bem próxima da mediana, que é 42.50 anos. Outro ponto que é válido notar, é que o aluno mais velho possui 49 anos de diferença do aluno mais novo. 
+
+```{r}
+summary(Tab$idade)
+```
+
+
+$\newline$
+
+### Relação entre o Coeficiente de Rendimento e as horas estudadas fora de sala de aula
+
+Tratando do coeficiente de rendimento, inicialmente, percebemos que o público feminino possui maior mediana que o público masculino, mesmo possuindo um outlier com coeficiente inferior (perto dos 50). 
+
+Examinando o gráfico abaixo com mais cuidado, podemos retirar a informação que, dentro dos universitários do gênero masculino, existe uma diferença maior entre o CR mínimo e máximo, quando comparados com o sexo oposto.
+
+```{r, fig.align='center', fig.height= 4}
+library(tidyverse)
+str(Tab$CR)
+Tab$CR <- as.numeric(Tab$CR)
+ggplot(Tab, aes(x=genero,y=CR)) + geom_boxplot(fill = "white",
+          colour = "slateblue3", outlier.color = "tomato3",
+          outlier.shape = 16, outlier.size = 2) +  
+  ggtitle("Figura 3: Boxplot da relação \n entre gênero e Coeficiente de Rendimento") +
+  xlab("Gênero")+ theme(plot.title = element_text(hjust = 0.5))
+```
+
+
+Outro ponto que deve ser levado em conta são as horas estudadas fora da sala. Analisando as tabelas abaixo, é notável que, apesar dos homens no geral terem uma média de horas estudadas maior, seus coeficientes de rendimento são menores, como já observado anteriormente. 
+
+__Tabela relacionada ás horas estudadas pelos homens na turma__
+```{r}
+Tab$Horas <- as.numeric(Tab$Horas)
+H <- Tab %>%
+  filter(genero == "Masculino")
+summary(H$Horas)
+```
+
+A média de horas estudadas pelos homens é de aproximadamente 9.8, mesmo possuíndo exemplares que não estudam além do horário de aula.
+
+__Tabela relacionada ás horas estudadas pelas mulheres na turma__
+```{r}
+Tab$Horas <- as.numeric(Tab$Horas)
+M <- Tab %>%
+  filter(genero == "Feminino")
+summary(M$Horas)
+```
+
+Entretanto, a média feminina chega a 8.36 horas, aproximadamente, ainda que todas as mulheres estudem pelo menos 3 horas fora de sala.
+
+
+```{r}
+ggplot(Tab, aes(Horas)) + geom_histogram(bins = 10, aes(fill = ..count..)) + 
+  scale_fill_gradient("Densidade") + 
+  scale_x_continuous(name = "Horas", breaks = seq(0,20,2)) +
+  scale_y_continuous(name = "Frequência") + theme_light() +  
+  ggtitle("Figura 4: Histograma da relação de horas estudadas") + 
+  theme(plot.title = element_text(hjust = 0.5))
+```
+
+$\newline$
+
+### A importância de tratar os casos de estudantes que trabalham ou que possuem filhos.
+
+A vida pessoal de cada aluno, bem como, as atividades que exerce, influenciam e muito no resultados obtido através dos estudos. Isso ocorre pois a divisão do tempo destinado ao estudo pode variar bastante dependendo do papel familiar que o participante da pesquisa possui. 
+
+Os dados coletados também nos ajudam a veríficar esses pontos são válidos no momento de uma avaliação de turma, por esse motivo, as tabelas a seguir ilustram bem a realidade vivida pelos concorrentes à vaga do curso de Serviço Social.
+
+A figura 5 representa a proporção de estudantes que possuem a necessidade de dividir seu tempo trabalhando, muitas vezes por vulnerabilidade socioeconômica. Sabemos que atualmente ainda existem diversas pessoas que além buscar conhecimento realizando uma faculdade, tem a responsabilidade de levar sustento para suas casas. Dentro da turma de estatística não seria diferente, cinquenta e seis por cento (56%) estão no mercado de trabalho.
+
+```{r, fig.align='center', fig.height= 4}
+tb1 <- table(Tab$Trabalha)
+p1 <- prop.table(tb1)
+percent <- round(100*(tb1/sum(tb1)), digits = 2)
+pie(p1, labels = percent,main ="Figura 5: Proporção de Estudantes que Trabalham
+    \n (Em porcentagem)",cex = 1,
+    col = c(2,11))
+legend("topright", fill=c(2,11), legend=c("Não","Sim"))
+```
+$\newline$
+
+Há também aqueles que são pais e mães, que apresentam a necessidade de dividir seu tempo com os filhos. Dentro desse tema, há uma certa divisão entre os estudantes, visto que cerca de cinquenta e quatro por cento (54%) tem filhos.
+
+```{r, fig.align='center', fig.height= 4}
+library(RColorBrewer)
+f <- table(Tab$Filhos)
+filhos <- prop.table(f)
+percent1 <- round(100*(f/sum(f)), digits = 3)
+
+cores <- brewer.pal(3, "Set3")
+
+pie(filhos,labels=percent1,main ="Figura 6: Proporção entre estudantes que possuem filhos
+    \n (Em porcentagem)",cex = 1
+    , col = c(cores))
+legend("topright",fill = c(cores), legend=c(names(f)))
+```
+$\newline$
+
+### EM
+
+O local onde o aluno cursou o ensino médio também deve ser levado em conta quando tentamos medir o desempenho dele em algo, visto que, nossos ensinos públicos muitas vezes são defasados em relação ao ensino privado. 
+
+Dessa maneira, analisando a tabela abaixo podemos inferir que vinte e quatro, dos cinquenta alunos participantes, tiveram seu ensino médio divido entre escolas públicas e privadas, que representa cerca de quarenta e oito por cento (48%) do total, dezesseis pessoas, representando trinta e dois por cento (32%) estudaram somente em escolas particulares e os outros vinte por cento (20%), indicando 10 pessoas, estudaram apenas em escola pública.
+
+```{r}
+em.tb <- table(Tab$EM)
+
+EM1 <- cbind("Freq.Abs." = em.tb)
+
+EM2 <- cbind("Freq.Rel." = prop.table(em.tb))
+
+EM3 <- cbind("Freq.Abs." = addmargins(em.tb))
+EM4 <- cbind("Freq.Rel." = addmargins(prop.table(em.tb)))
+
+knitr::kable(cbind("Freq.Abs." = addmargins(em.tb), "Freq.Rel." = 
+        addmargins(prop.table(em.tb))))
+```
+$\newline$
+
+
+### Livros
+
+O número de acadêmicos que lêem livros é extremamente baixo, cinquenta por cento (50%) dos aulistas não lê nenhum livro durante o ano. De resto, os outros vinte e cinco alunos ficam divididos entre um, dois, três, quatro e cinco livros por ano, com maior predominância em dois livros. 
+
+Em contrapartida, considerando a figura 7, a biblioteca da UFV é utilizada consideravelmente, uma vez que quinze universitários utilizam ela com muita frequência e doze com baixa frequência, eles representam cinquenta e quatro por cento (54%) da turma, enquanto quem nunca utiliza representa vinte por cento (20%).
+
+__Relação entre livros lidos por ano e quantidade de alunos__
+```{r, fig.align='center', fig.height= 4}
+libr <- table(Tab$Livros)
+p2 <- prop.table(libr)
+books <- data.frame(libr)
+knitr::kable(head(rename(books, c("Qtd.Livros" = "Var1"))))
+```
+$\newline$
+
+```{r,  fig.align='center', fig.height= 3}
+tabBBT <- table(Tab$BBT)
+tabBBT <- as.data.frame(tabBBT)
+ggplot(tabBBT, aes(x = Var1, y = Freq, fill = Freq)) + 
+  geom_col(show.legend = FALSE) +
+  geom_text(aes(label = Freq), nudge_y = 1) +
+  ggtitle("Figura 7: Utilização da Biblioteca \n pelos alunos") + 
+  theme_light()+ xlab("") + 
+  ylab("Frequência de Estudantes") + coord_flip() 
+```
+$\newline$
+
+### Nível de inglês
+
+Por fim, o nível de conhecimento em inglês pode ser avaliado na figura 8, responsável por indicar que existe uma divisão de quatorze alunos possuíntes de um bom conhecimento em inglês e quatorze que tem um péssimo.
+
+```{r,  fig.align='center', fig.height= 3}
+tab <- table(Tab$Ingles)
+tab <- as.data.frame(tab)
+ggplot(tab, aes(x = Var1, y = Freq, fill = Var1)) + 
+  geom_col(show.legend = FALSE) +
+  geom_text(aes(label = Freq), nudge_y = 1) +
+  ggtitle("Figura 8: Formação dos Estudantes em Inglês") + 
+  theme_light()+ xlab("Nível do Inglês") + 
+  ylab("Número de Estudantes") + 
+  theme(plot.title = element_text(hjust = 0.5))
+```
+$\newline$
+
+## Conclusão
+
+Em virtude dos argumentos apresentados, podemos concluir que 44% dos aulistas são do sexo masculino, enquanto 56% são do sexo feminino, ademais, possuem idades variando de 19 a 68 anos, com uma certa predominância na faixa dos 25-30 anos e com a média em torno dos 42 - 43 anos. 
+
+As mulheres da turma possuem melhor aproveitamento na matéria, apesar de estudarem menos em média, aproximadamente 8,36 enquanto os homens 9,78. Cerca de 56% dos discentes trabalham e 54% possuem filhos. A maior parte teve seu ensino médio dividido entre escolas públicas e privadas, não tem costume de ler mas utilizam a biblioteca com certa frequência. É válido ressaltar também que 25 pessoas tem um conhecimento ruim ou péssimo no inglês, enquanto 25 possuem um conhecimento bom ou regular.
