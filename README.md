@@ -1,5 +1,5 @@
 # Report Initiation to Statistics
-## Relatório direcionado à matéria de Iniciação a Estatística
+## Relatório direcionado à matéria de Iniciação a Estatística - R
 
 O trabalho em questão tem como objetivo traçar os registros dos alunos matriculados em Estatística, o perfil
 de cada um, bem como suas principais características que impactam no desempenho obtido na matéria, com
